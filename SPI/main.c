@@ -1,6 +1,6 @@
 /**
-*      @file main.c (LAB1 CSE5342)
-*      @author Prithvi Bhat (pnb3598@mavs.uta.edu) (1002033598)
+*      @file main.c
+*      @author Prithvi Bhat
 *      @brief Control LED through SPI IO expander
 *      @date 2022-09-05
 **/
