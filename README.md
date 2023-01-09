@@ -23,3 +23,9 @@ Some of these projects were developed as part of my course at UT Arlington under
 * Interrupt propagated to TM4C123GXL via I2C
 * ISR in TM4C123GXL flips LEDs, also interfaced to MCP23008 over I2C
 * SPI interface is configured for operation at a 100 kHz rate
+
+## RTC
+* Uses the internal RTC module on the microcontroller
+### Summary
+* Uses the two push buttons on the Tiva-C launchpad - one to put the board in low power hibernation and one to wake and resume normal operation
+* Configures the RTC and hibernation modules appropriately to act on the button presses
