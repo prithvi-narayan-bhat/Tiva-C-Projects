@@ -74,6 +74,8 @@ void initCan(canModule_t canModule)
 **/
 bool txCan(canModule_t canModule, canFrame_t canFrame)
 {
+    canFrame.frameStatus = 0x00;                                    // Indicate Frame staging has begun
+
     // Configure CAN to transmit
     uint8_t i;
     CAN0_CTL_R = CAN_CTL_INIT;                                      // Set Tx High. Block all Rx and Tx

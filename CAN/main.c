@@ -25,7 +25,9 @@ void main(void)
 	canFrame_t canFrame;
 
 	canFrame.canArbitrationId[0] = 1;	// Set Arbitration ID
-	canFrame.canData[0] = 0xFF;			// Set CAN Data
+	canFrame.canData[0] = 0x50;			// Set CAN Data
+	canFrame.canData[1] = 0x4E;
+	canFrame.canData[2] = 0x42;
 	canFrame.dataByteCount = 1;			// Request transmission of only one byte
 	canFrame.messageNumber = 1;			// Something between 0x01 and 0x20
 

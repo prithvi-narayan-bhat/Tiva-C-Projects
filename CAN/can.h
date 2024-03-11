@@ -21,11 +21,11 @@ typedef enum
 **/
 typedef struct
 {
-    uint8_t dataByteCount;
-    uint8_t messageNumber;
-    uint8_t canData[7];
-    uint16_t canArbitrationId[2];
-
+    uint8_t dataByteCount;              // Number of bytes to transmit or received
+    uint8_t messageNumber;              // Message number
+    uint8_t canData[7];                 // Data for Tx/Rx
+    uint16_t canArbitrationId[2];       // To resolve arbitration
+    uint8_t frameStatus;                // Tx/Rx frame status [HX0] Tx Staged; [HXF] Tx Complete; [H0X] Rx Started; [HFX] Rx Complete
 } canFrame_t;
 
 void initCan(canModule_t canModule_t);

@@ -48,5 +48,8 @@
 .tmp_versions/
 modules.order
 Module.symvers
+
+# CAN module
+CAN/Debug/
 Mkfile.old
 dkms.conf
