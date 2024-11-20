@@ -14,9 +14,10 @@
 #define CAN1_Tx
 
 /**
-*      @brief Function to initialise CAN module
-*      @param canModule 1 of two modules to be initialised
-**/
+ *      @brief Function to initialise CAN module
+ *      @param canModule 1 of two modules to be initialised
+ *      @todo add support for multiple CAN modules; Use canModule
+ **/
 void initCan(canModule_t canModule)
 {
     switch (canModule)
@@ -69,12 +70,15 @@ void initCan(canModule_t canModule)
 *      @brief Function to transmit a packet of data over CAN
 *      @param canModule module to transmit over
 *      @param canFrame elements of data to be transmitted
-*      @return true return on success
-*      @return false return on failure
 **/
-bool txCan(canModule_t canModule, canFrame_t canFrame)
+void txCan(canModule_t canModule, canFrame_t canFrame)
 {
-    canFrame.frameStatus = 0x00;                                    // Indicate Frame staging has begun
+    while (
+        canFrame.frameStatus != CAN_FRAME_RECEIVING ||
+        canFrame.frameStatus != CAN_FRAME_STAGING
+    )                                                               // Wait for CAN frame to be unoccupied
+
+    canFrame.frameStatus = CAN_FRAME_STAGING;                       // Indicate Frame staging has begun
 
     // Configure CAN to transmit
     uint8_t i;
@@ -113,5 +117,29 @@ bool txCan(canModule_t canModule, canFrame_t canFrame)
     CAN0_CTL_R &= ~CAN_CTL_INIT;                                    // Set Tx High. Block all Rx and Tx
     CAN0_IF1CRQ_R |= canFrame.messageNumber;                        // Set the Message Number. CAN begins transmission on setting this bit
 
-    return true;
+    canFrame.frameStatus = CAN_FRAME_TRANSMITTED;                   // Indicate Tx is complete
+}
+
+/**
+ *      @brief Function to receive and store a CAN frame
+ *      @param canModule Module to receive from
+ *      @param canFrame Structure to store received frame
+ *      @todo add support for multiple CAN modules; Use canModule
+ **/
+void rxCan(canModule_t canModule, canFrame_t canFrame)
+{
+    while (
+        canFrame.frameStatus != CAN_FRAME_RECEIVING ||
+        canFrame.frameStatus != CAN_FRAME_STAGING
+    )                                                               // Wait for CAN frame to be unoccupied
+
+    canFrame.frameStatus = CAN_FRAME_RECEIVING;                     // Block can frame to start receiving
+
+    if (CAN0_IF2MCTL_R & CAN_IF2MCTL_NEWDAT)                        // Check for new data in receive buffer
+    {
+        canFrame.canData[0] = CAN0_IF2DA1_R;                        // Store received byte into frame structure
+        CAN0_IF2MCTL_R &= ~CAN_IF2MCTL_NEWDAT;                      // Clear to indicate message has been read
+    }
+
+    canFrame.frameStatus = CAN_FRAME_RECEIVED;                      // Block can frame to start receiving
 }

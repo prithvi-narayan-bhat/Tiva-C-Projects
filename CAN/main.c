@@ -13,6 +13,8 @@
 #include "wait.h"
 #include "can.h"
 
+#define WAIT_TX while(canFrame.frameStatus != CAN_FRAME_TRANSMITTED)
+
 /**
 *      @brief Main driver for the entire project
 **/
@@ -32,6 +34,7 @@ void main(void)
 	canFrame.messageNumber = 1;			// Something between 0x01 and 0x20
 
 	txCan(CAN0, canFrame);				// Pack and transmit frame
+	WAIT_TX;							// Wait for CAN Tx
 
 	return;
 }
